@@ -1,0 +1,29 @@
+logging:
+  level:
+    org.springframework: ERROR
+    net.secondphase.lsicloud: DEBUG
+
+app:
+  applicationName: PropertiesExperiment
+  applicationDescription: ${app.applicationName} is a Spring Boot application
+  solrUrl: http://localhost:8983/solr/
+  solrWaitFlush: false
+  solrWaitSearcher: true
+  solrSoftCommit: true
+
+---
+
+spring:
+  profiles: test
+app:
+  bootstrapServers: default-test-bootstrap-servers
+  url: default-test-url
+---
+spring:
+  profiles: prod
+app:
+  bootstrapServers: default-prod-bootstrap-servers
+  url: default-prod-url
+
+
+

@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: propexp-config-map
+data:
+  application.yml: |-
+    logging:
+      level:
+        org.springframework: ERROR
+        net.secondphase.lsicloud: DEBUG
+
+    app:
+      applicationName: PropertiesExperiment
+      applicationDescription: ${app.applicationName} is a Spring Boot application
+      solrUrl: http://localhost:8983/solr/
+      solrWaitFlush: false
+      solrWaitSearcher: true
+      solrSoftCommit: true
+
+    ---
+    spring:
+      profiles: test
+    app:
+      bootstrapServers: kafka:9092
+      url: jdbc:tc:postgresql:9.6.8://localhost/michaeldb
+
+    ---
+    spring:
+      profiles: prod
+    app:
+      bootstrapServers: "b-3.solr-kafka-cluster.plq6de.c2.kafka.us-east-1.amazonaws.com:9092,b-2.solr-kafka-cluster.plq6de.c2.kafka.us-east-1.amazonaws.com:9092,b-1.solr-kafka-cluster.plq6de.c2.kafka.us-east-1.amazonaws.com:9092"
+      url: jdbc:postgresql://testcloudlsi.czc07u7xohnq.us-east-1.rds.amazonaws.com:5432/michaeldb?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory

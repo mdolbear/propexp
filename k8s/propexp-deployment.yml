@@ -1,0 +1,35 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: propexp
+spec:
+  selector:
+    matchLabels:
+      app: propexp
+      tier: backend
+      team: 2phase
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: propexp
+        tier: backend
+        team: 2phase
+    spec:
+      volumes:
+      - name: application-properties-map
+        configMap:
+          name: propexp-config-map
+          items:
+            - key: application.yml
+              path: application.yml
+      containers:
+      - name: propexp
+        image: mdolbear/propexp:1.0-SNAPSHOT
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: application-properties-map
+          mountPath: /config
+          readOnly: true
+
